@@ -5,12 +5,14 @@ import Card from './components/Card';
 import { NotificationIcon } from './components/Icons';
 import Logo from './components/Logo';
 import Course from './components/Course';
+import Menu from './components/Menu';
 
 export default class App extends React.Component {
   render() {
     return (
       <Container>
         <SafeAreaView>
+          <Menu />
           <ScrollView>
             <TitleBar>
               <Avatar source={require('./assets/avatar.jpg')} />
@@ -197,7 +199,7 @@ const courses = [
     logo: require('./assets/logo-framerx.png'),
     author: 'Emamnuel Adesile',
     avatar: require('./assets/avatar.jpg'),
-    caption: 'Learn †ø bring your design to live'
+    caption: 'Learn to bring your design to live'
   },
   {
     title: 'Sketch for beginners',
