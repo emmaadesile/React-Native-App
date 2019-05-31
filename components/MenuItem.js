@@ -26,7 +26,7 @@ const Container = styled.View`
 const Content = styled.View``;
 
 const IconView = styled.View`
-  margin-right: 30px;
+  margin-right: 20px;
   justify-content: center;
   align-items: center;
 `;
@@ -34,7 +34,7 @@ const IconView = styled.View`
 const Title = styled.Text`
   font-size: 24px;
   color: #3c4560;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const Text = styled.Text`

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Animated, TouchableOpacity, Dimensions } from 'react-native';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import { Icon } from 'expo';
 import MenuItem from './MenuItem';
 
@@ -12,15 +13,25 @@ class Menu extends React.Component {
   };
 
   componentDidMount() {
-    Animated.spring(this.state.top, {
-      toValue: 0
-    }).start();
+    this.toggleMenu();
+  }
+
+  componentDidUpdate() {
+    this.toggleMenu();
   }
 
   toggleMenu = () => {
-    Animated.spring(this.state.top, {
-      toValue: screenHeight
-    }).start();
+    if (this.props.action === 'openMenu') {
+      Animated.spring(this.state.top, {
+        toValue: 54
+      }).start();
+    }
+
+    if (this.props.action === 'closeMenu') {
+      Animated.spring(this.state.top, {
+        toValue: screenHeight
+      }).start();
+    }
   };
 
   render() {
@@ -31,7 +42,10 @@ class Menu extends React.Component {
           <Title>Emmanuel Adesile</Title>
           <Subtitle>Developer at Design+Radii</Subtitle>
         </Cover>
-        <TouchableOpacity onPress={this.toggleMenu} style={closeButtonStyles}>
+        <TouchableOpacity
+          onPress={this.props.closeMenu}
+          style={closeButtonStyles}
+        >
           <CloseView>
             <Icon.Ionicons name="ios-close" size={44} color="#546bfb" />
           </CloseView>
@@ -51,14 +65,25 @@ class Menu extends React.Component {
   }
 }
 
-export default Menu;
+const mapStateToProps = state => {
+  return { action: state.action };
+};
 
+const mapDispatchToProps = dispatch => ({
+  closeMenu: () => dispatch({ type: 'CLOSE_MENU' })
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Menu);
+
+// ======================================== Styles
 const Image = styled.Image`
   position: absolute;
   width: 100%;
   height: 100%;
 `;
-
 const Title = styled.Text`
   color: white;
   font-weight: 600;
@@ -84,6 +109,8 @@ const Container = styled.View`
   width: 100%;
   height: 100%;
   z-index: 100;
+  border-radius: 10;
+  overflow: hidden;
 `;
 
 const CloseView = styled.View`
