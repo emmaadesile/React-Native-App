@@ -14,6 +14,7 @@ import { NotificationIcon } from '../components/Icons';
 import Logo from '../components/Logo';
 import Course from '../components/Course';
 import Menu from '../components/Menu';
+import Avatar from '../components/Avatar';
 
 class HomeScreen extends React.Component {
   state = {
@@ -22,6 +23,9 @@ class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
+    fetch('https://uinames.com/api/?ext')
+      .then(resp => resp.json())
+      .then();
     StatusBar.setBarStyle('dark-content', true);
   }
 
@@ -75,13 +79,13 @@ class HomeScreen extends React.Component {
                   style={{
                     position: 'absolute',
                     top: 0,
-                    left: 0
+                    left: 24
                   }}
                 >
-                  <Avatar source={require('../assets/avatar.jpg')} />
+                  <Avatar />
                 </TouchableOpacity>
                 <Title>Welcome Back,</Title>
-                <Name>Emmanuel</Name>
+                <Name>{this.props.name}</Name>
                 <NotificationIcon
                   style={{ position: 'absolute', top: 5, right: 20 }}
                 />
@@ -139,7 +143,8 @@ class HomeScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  action: state.action
+  action: state.action,
+  name: state.name
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -179,14 +184,6 @@ const TitleBar = styled.View`
   width: 100%;
   margin-top: 50px;
   padding-left: 80px;
-`;
-
-const Avatar = styled.Image`
-  width: 44px;
-  height: 44px;
-  background: black;
-  border-radius: 22px;
-  margin-left: 20px;
 `;
 
 const Title = styled.Text`
