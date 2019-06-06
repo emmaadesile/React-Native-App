@@ -17,6 +17,10 @@ import Menu from '../components/Menu';
 import Avatar from '../components/Avatar';
 
 class HomeScreen extends React.Component {
+  static navigationOptions = {
+    header: null
+  };
+
   state = {
     scale: new Animated.Value(1),
     opacity: new Animated.Value(1)
@@ -111,29 +115,37 @@ class HomeScreen extends React.Component {
                 showsHorizontalScrollIndicator={false}
               >
                 {cards.map((card, index) => (
-                  <Card
+                  <TouchableOpacity
                     key={index}
-                    image={card.image}
-                    title={card.title}
-                    subtitle={card.subtitle}
-                    caption={card.caption}
-                    logo={card.logo}
-                  />
+                    onPress={() => {
+                      this.props.navigation.push('Section');
+                    }}
+                  >
+                    <Card
+                      image={card.image}
+                      title={card.title}
+                      subtitle={card.subtitle}
+                      caption={card.caption}
+                      logo={card.logo}
+                    />
+                  </TouchableOpacity>
                 ))}
               </ScrollView>
               <Subtitle>Popular Courses</Subtitle>
-              {courses.map((course, index) => (
-                <Course
-                  key={index}
-                  title={course.title}
-                  subtitle={course.subtitle}
-                  image={course.image}
-                  logo={course.logo}
-                  author={course.author}
-                  avatar={course.avatar}
-                  caption={course.caption}
-                />
-              ))}
+              <TouchableOpacity>
+                {courses.map((course, index) => (
+                  <Course
+                    key={index}
+                    title={course.title}
+                    subtitle={course.subtitle}
+                    image={course.image}
+                    logo={course.logo}
+                    author={course.author}
+                    avatar={course.avatar}
+                    caption={course.caption}
+                  />
+                ))}
+              </TouchableOpacity>
             </ScrollView>
           </SafeAreaView>
         </AnimatedContainer>
@@ -162,7 +174,8 @@ export default connect(
 const Container = styled.View`
   flex: 1;
   background-color: #f0f3f5;
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `;
 
 const AnimatedContainer = new Animated.createAnimatedComponent(Container);
