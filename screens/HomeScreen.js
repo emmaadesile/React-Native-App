@@ -15,6 +15,40 @@ import Logo from '../components/Logo';
 import Course from '../components/Course';
 import Menu from '../components/Menu';
 import Avatar from '../components/Avatar';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+
+const CardsQuery = gql`
+  {
+    cardsCollection {
+      items {
+        title
+        subtitle
+        caption
+        logo {
+          title
+          description
+          contentType
+          fileName
+          url
+          width
+          height
+          size
+        }
+        image {
+          title
+          description
+          contentType
+          fileName
+          size
+          width
+          height
+          url
+        }
+      }
+    }
+  }
+`;
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -114,28 +148,37 @@ class HomeScreen extends React.Component {
                 style={{ paddingBottom: 30 }}
                 showsHorizontalScrollIndicator={false}
               >
-                {cards.map((card, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      this.props.navigation.push('Section');
-                    }}
-                  >
-                    <Card
-                      image={card.image}
-                      title={card.title}
-                      subtitle={card.subtitle}
-                      caption={card.caption}
-                      logo={card.logo}
-                    />
-                  </TouchableOpacity>
-                ))}
+                <Query query={CardsQuery}>
+                  {({ loading, error, data }) => {
+                    if (loading) return <Message>Loading...</Message>;
+                    if (error) return <Message>Error...</Message>;
+
+                    return data.cardsCollection.items.map((card, index) => (
+                      <CardsContainer key={index}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.props.navigation.push('Section', {
+                              section: card
+                            });
+                          }}
+                        >
+                          <Card
+                            image={card.image}
+                            title={card.title}
+                            subtitle={card.subtitle}
+                            caption={card.caption}
+                            logo={card.logo}
+                          />
+                        </TouchableOpacity>
+                      </CardsContainer>
+                    ));
+                  }}
+                </Query>
               </ScrollView>
               <Subtitle>Popular Courses</Subtitle>
-              <TouchableOpacity>
-                {courses.map((course, index) => (
+              {courses.map((course, index) => (
+                <TouchableOpacity key={index}>
                   <Course
-                    key={index}
                     title={course.title}
                     subtitle={course.subtitle}
                     image={course.image}
@@ -144,8 +187,8 @@ class HomeScreen extends React.Component {
                     avatar={course.avatar}
                     caption={course.caption}
                   />
-                ))}
-              </TouchableOpacity>
+                </TouchableOpacity>
+              ))}
             </ScrollView>
           </SafeAreaView>
         </AnimatedContainer>
@@ -170,6 +213,17 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(HomeScreen);
+
+const Message = styled.Text`
+  color: #b8bece;
+  margin: 20px;
+  font-size: 15px;
+  font-weight: 500;
+`;
+
+const CardsContainer = styled.View`
+  flex-direction: row;
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -238,36 +292,36 @@ const logos = [
   }
 ];
 
-const cards = [
-  {
-    image: require('../assets/background11.jpg'),
-    title: 'React Native for Designers',
-    subtitle: 'React Native',
-    caption: '1 of 12 sections',
-    logo: require('../assets/logo-react.png')
-  },
-  {
-    image: require('../assets/background12.jpg'),
-    title: 'Styled Components',
-    subtitle: 'Styled Components',
-    caption: '2 of 12 sections',
-    logo: require('../assets/logo-react.png')
-  },
-  {
-    image: require('../assets/background13.jpg'),
-    title: 'Props and Icons',
-    subtitle: 'React Native',
-    caption: '3 of 12 sections',
-    logo: require('../assets/logo-react.png')
-  },
-  {
-    image: require('../assets/background2.jpg'),
-    title: 'Static Data and Loop',
-    subtitle: 'React Native',
-    caption: '4 of 12 sections',
-    logo: require('../assets/logo-react.png')
-  }
-];
+// const cards = [
+//   {
+//     image: require('../assets/background11.jpg'),
+//     title: 'React Native for Designers',
+//     subtitle: 'React Native',
+//     caption: '1 of 12 sections',
+//     logo: require('../assets/logo-react.png')
+//   },
+//   {
+//     image: require('../assets/background12.jpg'),
+//     title: 'Styled Components',
+//     subtitle: 'Styled Components',
+//     caption: '2 of 12 sections',
+//     logo: require('../assets/logo-react.png')
+//   },
+//   {
+//     image: require('../assets/background13.jpg'),
+//     title: 'Props and Icons',
+//     subtitle: 'React Native',
+//     caption: '3 of 12 sections',
+//     logo: require('../assets/logo-react.png')
+//   },
+//   {
+//     image: require('../assets/background2.jpg'),
+//     title: 'Static Data and Loop',
+//     subtitle: 'React Native',
+//     caption: '4 of 12 sections',
+//     logo: require('../assets/logo-react.png')
+//   }
+// ];
 
 const courses = [
   {
@@ -295,7 +349,7 @@ const courses = [
     logo: require('../assets/logo-framerx.png'),
     author: 'Emamnuel Adesile',
     avatar: require('../assets/avatar.jpg'),
-    caption: 'Learn to bring your design to live'
+    caption: 'Learn to bring your design to life'
   },
   {
     title: 'Sketch for beginners',

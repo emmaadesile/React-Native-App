@@ -39,7 +39,7 @@ class Menu extends React.Component {
       <AnimatedContainer style={{ top: this.state.top }}>
         <Cover>
           <Image source={require('../assets/background2.jpg')} />
-          <Title>Emmanuel Adesile</Title>
+          <Title>{this.props.name}</Title>
           <Subtitle>Developer at Design+Radii</Subtitle>
         </Cover>
         <TouchableOpacity
@@ -66,7 +66,7 @@ class Menu extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { action: state.action };
+  return { action: state.action, name: state.name };
 };
 
 const mapDispatchToProps = dispatch => ({
