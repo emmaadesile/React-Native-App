@@ -1,5 +1,7 @@
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
@@ -27,6 +29,7 @@ const reducer = (state = initialState, action) => {
         action: 'closeMenu'
       };
     case 'OPEN_MENU':
+      console.log(state);
       return {
         ...state,
         action: 'openMenu'
@@ -41,7 +44,9 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const store = createStore(reducer);
+const middleware = composeWithDevTools(applyMiddleware(thunk));
+
+const store = createStore(reducer, middleware);
 
 const App = () => (
   <ApolloProvider client={client}>
